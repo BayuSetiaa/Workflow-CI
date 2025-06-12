@@ -1,0 +1,13 @@
+name: mlflow-env
+channels:
+  - defaults
+dependencies:
+  - python=3.12.7
+  - pandas
+  - scikit-learn
+  - xgboost
+  - imbalanced-learn
+  - matplotlib
+  - pip
+  - pip:
+      - mlflow==2.19.0
