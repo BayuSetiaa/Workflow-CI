@@ -13,7 +13,7 @@ mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI"))
 mlflow.set_experiment("heart_failure_ci_experiment")
 
 # Load data
-df = pd.read_csv("heart_preprocessing/heart.csv")
+df = pd.read_csv("https://github.com/BayuSetiaa/Workflow-CI/blob/2b197bb9eace2435fb182d039a7b0adf5289527c/MLProject/heart_preprocessing/heart.csv")
 
 # Label encoding
 categorical = ["Sex", "ChestPainType", "RestingECG", "ExerciseAngina", "ST_Slope"]
