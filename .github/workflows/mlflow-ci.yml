@@ -1,0 +1,40 @@
+name: Run MLflow Training CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+
+    env:
+      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+
+    steps:
+      - name: Set up job
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.12.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12.7
+
+      - name: Check Env
+        run: |
+          echo "Using MLflow URI: $MLFLOW_TRACKING_URI"
+
+      - name: Install dependencies
+        working-directory: ./MLProject
+        run: |
+          pip install --upgrade pip
+          pip install -r <(conda list --explicit) || true
+          pip install pandas scikit-learn xgboost imbalanced-learn mlflow==2.19.0 matplotlib
+
+      - name: Run mlflow project
+        working-directory: ./MLProject
+        run: |
+          mlflow run . --env-manager=local
