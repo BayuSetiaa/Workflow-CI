@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+      MLFLOW_TRACKING_URI: file:./mlruns
 
     steps:
       - name: Set up job
@@ -31,7 +31,6 @@ jobs:
         working-directory: ./MLProject
         run: |
           pip install --upgrade pip
-          pip install -r <(conda list --explicit) || true
           pip install pandas scikit-learn xgboost imbalanced-learn mlflow==2.19.0 matplotlib
 
       - name: Run mlflow project
