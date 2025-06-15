@@ -2,6 +2,8 @@ import os
 import mlflow
 import mlflow.sklearn
 import pandas as pd
+import numpy as np
+import joblib
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -26,9 +28,11 @@ df["BP_HeartRate"] = df["RestingBP"] * df["MaxHR"]
 X = df.drop(columns=["HeartDisease"])
 y = df["HeartDisease"]
 
+# Split dan SMOTE
 X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=0.2, random_state=42)
 X_train, y_train = SMOTE().fit_resample(X_train, y_train)
 
+# Scaling
 scaler = MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
@@ -40,3 +44,8 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 acc = accuracy_score(y_test, y_pred)
 print(f"Akurasi: {acc:.4f}")
+
+# === Simpan model dan dataset uji untuk digunakan di monitoring ===
+joblib.dump(model, "model.joblib")
+np.save("X_test.npy", X_test)
+np.save("y_test.npy", y_test)
