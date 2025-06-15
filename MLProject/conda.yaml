@@ -1,13 +1,15 @@
 name: mlflow-env
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - python=3.12.7
   - pip
+  - numpy
+  - scikit-learn
+  - xgboost
+  - matplotlib
   - pip:
       - pandas
-      - scikit-learn
-      - xgboost
       - imbalanced-learn
       - mlflow==2.19.0
-      - matplotlib

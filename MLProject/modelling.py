@@ -10,17 +10,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from imblearn.over_sampling import SMOTE
 
-# Set MLflow tracking URI & experiment
-mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI", "file:///tmp/mlruns"))
-mlflow.set_experiment("heart_failure_ci_experiment")
-
-mlflow.set_tag("mlflow.runName", "model_training_with_registry")
-
-# Aktifkan autolog
 mlflow.sklearn.autolog()
 
 # Load dataset
-df = pd.read_csv("heart_preprocessing/heart.csv")  
+df = pd.read_csv("heart_preprocessing/heart.csv")
 
 # Preprocessing
 categorical = ["Sex", "ChestPainType", "RestingECG", "ExerciseAngina", "ST_Slope"]
@@ -52,14 +45,14 @@ y_pred = model.predict(X_test)
 acc = accuracy_score(y_test, y_pred)
 print(f"Akurasi: {acc:.4f}")
 
-# Log & Register model ke Model Registry
+# Log model (registrasi tetap bisa di luar start_run di CI)
 mlflow.sklearn.log_model(
     sk_model=model,
     artifact_path="model",
     registered_model_name="heart_failure_model"
 )
 
-# Simpan model dan data uji lokal untuk monitoring
+# Simpan model dan data uji lokal
 joblib.dump(model, "model.joblib")
 np.save("X_test.npy", X_test)
 np.save("y_test.npy", y_test)
